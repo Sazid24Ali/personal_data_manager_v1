@@ -87,11 +87,12 @@ public class LoginDetailsController {
     // Remove Login cred
     // @DeleteMapping("/delete/{userId}") // Deletion
     /*
-     * Commented This Mapping Because the Login Cred Should not be until THe User
-     * Object ois Present
+     * Commented This Mapping Because the Login Cred Should not be deleted until THe User
+     * Object is Present
      * So , THis Function is present to delete the Login Cred When the User tables
      * Details Are Deleted
      * This dunction is called in UsersControllerUtility Class
+     * So, No mapping is given Here
      */
     public ResponseEntity<?> removeLoginDetails(@PathVariable Integer userId) {
         String response = ServiceObject.deleteByuserid(userId);

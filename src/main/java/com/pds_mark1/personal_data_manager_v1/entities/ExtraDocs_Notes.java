@@ -32,7 +32,7 @@ public class ExtraDocs_Notes {
     @JoinColumn(name = "userID",nullable = false)
     private UserDetails user;
 
-    @Column(nullable = false,unique = true) // Since We are in update and delete.
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)

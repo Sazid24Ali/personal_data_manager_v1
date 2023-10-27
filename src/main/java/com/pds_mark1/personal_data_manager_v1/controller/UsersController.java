@@ -16,14 +16,22 @@ import org.springframework.web.multipart.MultipartFile;
 import com.pds_mark1.personal_data_manager_v1.controller.Utlities.UtilityForController;
 import com.pds_mark1.personal_data_manager_v1.entities.UserDetails;
 import com.pds_mark1.personal_data_manager_v1.exceptions_handler.MaxFileSizeExceededException;
-import com.pds_mark1.personal_data_manager_v1.service.Implementation.UsersServiceImpl;
+import com.pds_mark1.personal_data_manager_v1.service.UsersService;
+//import com.pds_mark1.personal_data_manager_v1.service.Implementation.UsersServiceImpl;
 
 
 @RestController
 @RequestMapping("/user")
 public class UsersController {
     @Autowired
-    UsersServiceImpl ServiceObject;
+    UsersService ServiceObject;
+    //UsersServiceImpl ServiceObject;
+    /*
+     * Here We can use the Service InferFace Object OR ServiceImpl Class 
+     * If We use Service Interface THis is called Loose Coupling
+     * If we use ServiceImpl Class It is called Tight Coupling 
+     * I am Using Service Interface Object in this UsersController only In other Controller Classes I am Using UserServiceImpl  
+     */
     
     UtilityForController utilityObject;
 
@@ -34,6 +42,7 @@ public class UsersController {
     // Dislpay
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getUserDetails(@PathVariable("id") Integer id) {
+        //To Retrive The UserData Using Id
         try {
             UserDetails obj = ServiceObject.getUser(id);
             return new ResponseEntity<>(obj, HttpStatus.OK);
@@ -61,6 +70,7 @@ public class UsersController {
 
     //Insert User
     @PostMapping("/register")
+    //Insert A New User
     public ResponseEntity<?> registerUserDetails(
             @RequestParam("profilePic") MultipartFile profilePic,
             @RequestParam("userData") String userData) {
@@ -85,6 +95,7 @@ public class UsersController {
             @PathVariable Integer userId,
             @RequestParam("profilePic") MultipartFile profilePic,
             @RequestParam("userData") String userData) {
+                //To Update the User Details
         UserDetails existingUser = ServiceObject.getUser(userId);
         if (existingUser == null) {
             return ResponseEntity.notFound().build();

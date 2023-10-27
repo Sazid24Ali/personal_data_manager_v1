@@ -15,3 +15,9 @@ public class SecurityConfig {
  */
 }
 
+
+/*******************************************************
+ * 
+    NOT YET USING THIS CLASS 
+    THIS WAS MEANT FOR LOGIN CHECKING AND ENCRYPTING THE PASSWORD AND STORING IT
+ */

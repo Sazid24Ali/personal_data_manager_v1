@@ -55,13 +55,15 @@ public class ExtraDocs_NotesController {
         }
 
         try {
-            ExtraDocs_Notes toInsert = utilityObject.insertExtraDocs_Notes(xDocs_Notes, picture);
+            ExtraDocs_Notes toInsert = utilityObject.insertExtraDocs_Notes(userID,xDocs_Notes, picture);
             toInsert.setUser(exisitingUserDetails); // Setting The USerData
             ServiceObject.insertXDocs_Notess(toInsert);
             return new ResponseEntity<>(toInsert.getTitle() + " was  Inserted Successfully ", HttpStatus.OK);
         } catch (MaxFileSizeExceededException e) {
             return new ResponseEntity<>("Maximum file size exceeded " + UtilityForController.SIZE_IN_KB + "KB",
                     HttpStatus.PAYLOAD_TOO_LARGE);
+        }catch (NullPointerException e) {
+            return new ResponseEntity<>("The Title Already Exists " + e, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("The Given Tiltle alredy Exists",
                     HttpStatus.BAD_REQUEST);

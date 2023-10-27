@@ -25,14 +25,14 @@ public class EducationDetails {
     @JoinColumn(name = "userID",nullable = false)
     private UserDetails user;
 
-    @Column(nullable = false,unique = true) // Since we usethis in delete and update operation
+    @Column(nullable = false) // Since we use this in delete and update operation
     private String eduQualification;
 
     @Column(nullable = false)
     private String schoolInstitution;
 
     @Column(nullable = false)
-    private Integer graduationYear = -1; /// Kept a default value as it was raising an Data Integrity error 
+    private Integer graduationYear ; 
 
     @Column(nullable = false)
     private Double gpaOrGrades;

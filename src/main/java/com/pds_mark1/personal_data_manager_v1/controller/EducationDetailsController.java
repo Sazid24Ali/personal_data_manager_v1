@@ -48,13 +48,15 @@ public class EducationDetailsController {
     @PostMapping("/insert/{userID}")
     public ResponseEntity<?> insertEduDetails(@PathVariable Integer userID, @RequestParam String eduDetails,
             @RequestParam("certificate") MultipartFile certificate) {
+        
 
+        System.out.println(eduDetails);
         UserDetails exisitingUserDetails = utilityObject.getuserData(userID);
         if (exisitingUserDetails == null) {
             return new ResponseEntity<>("User Not Found  \n Register First ", HttpStatus.NOT_FOUND);
         }
         try {
-            EducationDetails toInsert = utilityObject.insertEducationDetails(eduDetails, certificate);
+            EducationDetails toInsert = utilityObject.insertEducationDetails(userID,eduDetails, certificate);
             toInsert.setUser(exisitingUserDetails);
             ServiceObject.insertEducDetails(toInsert);
             return new ResponseEntity<>(toInsert.getEduQualification() + " was  Inserted Successfully ", HttpStatus.OK);
@@ -62,8 +64,11 @@ public class EducationDetailsController {
         } catch (MaxFileSizeExceededException e) {
             return new ResponseEntity<>("Maximum file size exceeded " + UtilityForController.SIZE_IN_KB + "KB",
                     HttpStatus.PAYLOAD_TOO_LARGE);
-        } catch (Exception e) {
-            return new ResponseEntity<>("The Given Tiltle alredy Exists"+e,
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>("The Given Tiltle alredy Exists",
+                    HttpStatus.BAD_REQUEST);
+        }catch (Exception e) {
+            return new ResponseEntity<>("UnHandled Error Raised "+e,
                     HttpStatus.BAD_REQUEST);
         }
 

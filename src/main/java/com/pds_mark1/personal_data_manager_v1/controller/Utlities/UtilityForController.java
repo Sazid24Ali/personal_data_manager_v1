@@ -14,6 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
+/*
+    UTILITY CLASS WHICH WILL BE USED IN THE CONTROLLER CLASSES 
+    IN ORDER TO INSERT THE DOCUMENT DATA
+
+ */
+
 @Controller
 public class UtilityForController {
     public static int SIZE_IN_KB = 490;// Maximum file size in bytes is 500 KB
@@ -23,7 +29,7 @@ public class UtilityForController {
      * "The ( SIZE_IN_KB + 10 ) WHen A user Inserts picture or document which is
      * greater than 490 KB
      * He/She Will Think They have Cracked the System
-     * ( Let them Think In that Way as it will make him happy ) NO LOSS  "
+     * ( Let them Think In that Way as it will make him happy ) NO LOSS "
      */
 
     @Autowired
@@ -114,10 +120,16 @@ public class UtilityForController {
 
     }
 
-    public ExtraDocs_Notes insertExtraDocs_Notes(String xDocs_NotesString, MultipartFile picture) throws Exception {
+    public ExtraDocs_Notes insertExtraDocs_Notes(Integer userID,String xDocs_NotesString, MultipartFile picture) throws Exception {
         handleFileUpload(picture);// Check The File Size is in the limits
         ExtraDocs_Notes xDocs_NotesObject = new ExtraDocs_Notes();
-        ExtraDocs_Notes xDocs_Notes = objectMapper.readValue(xDocs_NotesString,ExtraDocs_Notes.class);
+        ExtraDocs_Notes xDocs_Notes = objectMapper.readValue(xDocs_NotesString, ExtraDocs_Notes.class);
+         ExtraDocs_Notes existingDocs_Notes = xNotesService.getRecordByTitleAndUserId(xDocs_Notes.getTitle(), userID);
+        System.out.println("Notes and Docs :" + existingDocs_Notes);
+
+        if (existingDocs_Notes != null) {
+            throw new NullPointerException();
+        }
 
         xDocs_NotesObject.setTitle(xDocs_Notes.getTitle());
         xDocs_NotesObject.setDescription(xDocs_Notes.getDescription());
@@ -151,16 +163,24 @@ public class UtilityForController {
 
     }
 
-    public EducationDetails insertEducationDetails(String eduDetailsString, MultipartFile certificate)
+    public EducationDetails insertEducationDetails(Integer userID,String eduDetailsString, MultipartFile certificate)
             throws Exception {
         handleFileUpload(certificate); // Check The File Size is in the limits
         EducationDetails eduObject = new EducationDetails();
         EducationDetails eduDetails = objectMapper.readValue(eduDetailsString, EducationDetails.class);
+        System.out.println(eduDetails.getGraduationYear());
+        EducationDetails existingEduDetails = eduService.getRecordByeduDetailsAndUserId(eduDetails.getEduQualification(),userID);
+        //System.out.println("Education Details : " + existingEduDetails);
 
+        if (existingEduDetails != null) {
+            // Throwing this error as we should not add  multiple records of EduQualification for a same user 
+            throw new  NullPointerException();
+        }
         eduObject.setEduQualification(eduDetails.getEduQualification());
         eduObject.setSchoolInstitution(eduDetails.getSchoolInstitution());
         eduObject.setGpaOrGrades(eduDetails.getGpaOrGrades());
         eduObject.setUser(eduDetails.getUser());
+        eduObject.setGraduationYear(eduDetails.getGraduationYear());
         eduObject.setCertificates(certificate.getBytes());
 
         return eduObject;
@@ -170,6 +190,7 @@ public class UtilityForController {
             EducationDetails updatedEducationDetails, MultipartFile certificate) throws Exception {
         handleFileUpload(certificate); // Check The File Size is in the limits
         String message = "";
+        System.out.println(updatedEducationDetails);
 
         if (updatedEducationDetails.getEduQualification() != null) {
             existingEducationDetails.setEduQualification(updatedEducationDetails.getEduQualification());
