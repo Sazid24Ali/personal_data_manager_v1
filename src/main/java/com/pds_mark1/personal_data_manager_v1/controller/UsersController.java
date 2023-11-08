@@ -52,7 +52,7 @@ public class UsersController {
         return new ResponseEntity<>("User Not Found", HttpStatus.NOT_FOUND);
     }
     
-    // Remove USer
+    // Remove User
     @DeleteMapping("/delete/{userId}") // Deletion
     public ResponseEntity<?> deleteUserDetails(@PathVariable Integer userId) {
         // Perform user deletion here
