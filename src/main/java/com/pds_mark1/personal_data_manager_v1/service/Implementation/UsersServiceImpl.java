@@ -25,18 +25,18 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public boolean insertUser(UserDetails usersObject) {
+    public int insertUser(UserDetails usersObject) {
         
         try {
-            usersRepoObject.save(usersObject);
+            UserDetails obj =  usersRepoObject.save(usersObject);
             System.out.println("User Added Succesfully \nUser Id : " + usersObject.getUserID() + "\nName : "
                 + usersObject.getLastName());
-        return true;
+        return obj.getUserID();
             
         } catch (Exception e) {
             System.out.println("USerServiceImpl Error Raised : "+e);
         }
-        return false;
+        return 0;
         
     }
 

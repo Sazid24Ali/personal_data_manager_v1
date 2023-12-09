@@ -8,5 +8,6 @@ public interface LoginDetailsService {
     public String insertLgDetails (LoginDetails LgDetailsObject);
     public String updateLgDetails (LoginDetails LgDetailsObject);
     public String deleteByuserid(Integer userId);
+    public String getDataByUserName(String userName);
     
 }

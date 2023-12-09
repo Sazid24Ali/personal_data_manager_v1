@@ -3,6 +3,8 @@ package com.pds_mark1.personal_data_manager_v1.entities;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,6 +35,7 @@ public class UserDetails {
     @Column(nullable = false,unique = true)
     private String email;
 
+    @Column(nullable = false)
     private Timestamp dateOfBirth;
     
     @Lob

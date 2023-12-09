@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import com.pds_mark1.personal_data_manager_v1.service.Implementation.ExtraDocs_N
 
 @RestController
 @RequestMapping("/XNotesDocs")
+@CrossOrigin
 public class ExtraDocs_NotesController {
     @Autowired
     ExtraDocs_NotesServiceImpl ServiceObject;

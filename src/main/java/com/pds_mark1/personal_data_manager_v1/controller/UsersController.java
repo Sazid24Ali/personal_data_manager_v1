@@ -1,8 +1,12 @@
 package com.pds_mark1.personal_data_manager_v1.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +26,7 @@ import com.pds_mark1.personal_data_manager_v1.service.UsersService;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UsersController {
     @Autowired
     UsersService ServiceObject;
@@ -43,13 +48,23 @@ public class UsersController {
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getUserDetails(@PathVariable("id") Integer id) {
         //To Retrive The UserData Using Id
+        System.out.println("Retriving User Data ");
+        
         try {
+            // Map<String, String> body = new HashMap<>();
+            Map<String, UserDetails> body = new HashMap<>();
             UserDetails obj = ServiceObject.getUser(id);
-            return new ResponseEntity<>(obj, HttpStatus.OK);
+            body.put("userData",obj);
+            // body.put("userData","To Send");
+            // System.out.println("Found The Data "+obj);
+            // return new ResponseEntity<>(obj, HttpStatus.OK);
+            return new ResponseEntity<>(body, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("\n\n AN Exception Occured From UserController getUserDetails \n\n"+e);
         }
-        return new ResponseEntity<>("User Not Found", HttpStatus.NOT_FOUND);
+        Map<String, String> body = new HashMap<>();
+        body.put("msg", "User Not Found");
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
     
     // Remove User
@@ -72,20 +87,27 @@ public class UsersController {
     @PostMapping("/register")
     //Insert A New User
     public ResponseEntity<?> registerUserDetails(
-            @RequestParam("profilePic") MultipartFile profilePic,
+            @RequestParam(name = "profilePic" , required = false) MultipartFile profilePic,
             @RequestParam("userData") String userData) {
+
+        Map<String, String> body = new HashMap<>();
         try {
             UserDetails userObject = utilityObject.insertUserDetails(userData, profilePic);
-            boolean success = ServiceObject.insertUser(userObject);
-            if (success) {
-                return ResponseEntity.ok("Inserted Data\n" + userObject);
+            int userID = ServiceObject.insertUser(userObject);
+            if (userID != 0) {
+                body.put("msg","Inserted Data");
+                body.put("userId",String.format("%d",userID));
+                return new ResponseEntity<>(body, HttpStatus.OK);
             }
-            return new ResponseEntity<>("Email Already in use", HttpStatus.BAD_REQUEST);
+            body.put("msg","Email Already In Use");
+            return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
         } catch (MaxFileSizeExceededException e) {
-            return new ResponseEntity<>("Maximum file size exceeded " + UtilityForController.SIZE_IN_KB + "KB",
-                    HttpStatus.PAYLOAD_TOO_LARGE);
+            body.put("msg","File Is Too Large \n Upload Limit :"+ UtilityForController.SIZE_IN_KB + "KB");
+            return new ResponseEntity<>(body,HttpStatus.PAYLOAD_TOO_LARGE);
         } catch (Exception e) {
-            return new ResponseEntity<>("Unable to Process Your Request " + e, HttpStatus.BAD_REQUEST);
+            System.out.println(e);
+            body.put("msg","Unable to Process Your Request <br> Please Try After SomeTime <br>"+e);
+            return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -67,6 +67,7 @@ public class LoginDetailsServiceImpl implements LoginDetailsService {
         }
         return null;
     }
+
     public LoginDetails getLoginDetailsByusename(String username) {
         try {
             LoginDetails lDetailsObject = lDetailsRepoObject.findByUsername(username);
@@ -77,8 +78,12 @@ public class LoginDetailsServiceImpl implements LoginDetailsService {
         return null;
     }
     
-    public String getpasswordByusername(String username){
-        return lDetailsRepoObject.findPasswordByUsername(username);
+
+    @Override
+    public String getDataByUserName(String username){
+        
+        return lDetailsRepoObject.findDataByUsername(username);
+        
     }
 
     /* To Get User Data THis Function is Used In UserControllerUtilities  */
@@ -92,4 +97,7 @@ public class LoginDetailsServiceImpl implements LoginDetailsService {
         return userData;
     }
 
+    
+
+    
 }

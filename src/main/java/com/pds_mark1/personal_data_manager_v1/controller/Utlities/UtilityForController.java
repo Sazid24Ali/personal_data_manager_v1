@@ -12,6 +12,7 @@ import com.pds_mark1.personal_data_manager_v1.service.Implementation.SocialProfi
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
 /*
@@ -75,16 +76,20 @@ public class UtilityForController {
     }
 
     public UserDetails insertUserDetails(String userDataString, MultipartFile profilePic) throws Exception {
-        handleFileUpload(profilePic);// Check The File Size is in the limits
+        
         UserDetails userObject = new UserDetails();
         UserDetails userData = objectMapper.readValue(userDataString, UserDetails.class);
+
+        if(profilePic != null){
+            handleFileUpload(profilePic);// Check The File Size is in the limits
+            userObject.setProfilePicture(profilePic.getBytes());
+        }
 
         userObject.setFirstName(userData.getFirstName());
         userObject.setLastName(userData.getLastName());
         userObject.setEmail(userData.getEmail());
         userObject.setDateOfBirth(userData.getDateOfBirth());
-        userObject.setProfilePicture(profilePic.getBytes());
-
+        
         return userObject;
     }
 
