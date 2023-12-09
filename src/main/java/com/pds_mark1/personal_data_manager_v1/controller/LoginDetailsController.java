@@ -3,9 +3,7 @@ package com.pds_mark1.personal_data_manager_v1.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

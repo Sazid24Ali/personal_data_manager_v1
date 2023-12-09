@@ -3,7 +3,6 @@ package com.pds_mark1.personal_data_manager_v1.entities;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
